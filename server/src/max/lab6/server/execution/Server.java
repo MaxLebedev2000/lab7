@@ -4,7 +4,6 @@ import MainPackage.Pair;
 import max.lab6.server.collection.filecollection.Collection;
 import max.lab6.server.commands.ComandFactory;
 import max.lab6.server.commands.Comandable;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -80,7 +79,7 @@ public class Server implements Runnable {
         if (pair.getKey() != null){
             respond = pair.getKey().run(pair.getValue(), manager, (Integer)key.attachment());
         } else {
-            respond = "Неверная команда!!";
+            respond = "Неверная команда!";
         }
         buffer.clear();
         buffer.put(respond.getBytes());

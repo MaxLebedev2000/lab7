@@ -133,18 +133,7 @@ public class ComandFactory {
      * Выводит на экран справку по программе
      */
     private static Comandable helpCmd = ((jsonElement, manager, id) -> {
-        System.out.println("remove {element}: удалить элемент из коллекции по его значению\n" +
-                "clear: очистить коллекцию\n" +
-                "info: вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)\n" +
-                "add {element}: добавить новый элемент в коллекцию\n" +
-                "show: вывести в стандартный поток вывода все элементы коллекции в строковом представлении\n" +
-                "add_if_min {element}: добавить новый элемент в коллекцию, если его значение меньше, чем у наименьшего элемента этой коллекции\n" +
-                "save: сохранить коллекцию в файл\n" +
-                "help: справка\n" +
-                "start: запуск подпрограммы\n" +
-                "exit: выход из программы\n" +
-                "Пример json элемента: \n" +
-                "{\"cardHeight\":50,\"date\":\"Fri Aug 16 01:33:12 MSK 2019\",\"nosesize\":2.5,\"name\":\"Красавчик\",\"cardWidth\":2,\"photo\":{\"hair\":\"Red\",\"eyes\":\"Amber\"},\"headsize\":30.5,\"status\":\"Jailbird\",\"height\":72.5}");
+
         return "remove {element}: удалить элемент из коллекции по его значению\n" +
                 "clear: очистить коллекцию\n" +
                 "info: вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)\n" +
@@ -153,7 +142,6 @@ public class ComandFactory {
                 "add_if_min {element}: добавить новый элемент в коллекцию, если его значение меньше, чем у наименьшего элемента этой коллекции\n" +
                 "save: сохранить коллекцию в файл\n" +
                 "help: справка\n" +
-                "start: запуск подпрограммы\n" +
                 "exit: выход из программы\n" +
                 "import: загрузка данныз на сервер\n" +
                 "load: загрузка\n" +
@@ -186,14 +174,14 @@ public class ComandFactory {
     public static Pair<Comandable, String> createComand(String userInput) {
         String jsonRegex = "\\{\"cardHeight\":(\\d+.?\\d),\"date\":\"(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\\s(Jan|Feb|Mar|Apr|May|June|July|Aug|Sept|Oct|Nov|Dec)\\s[0-3]\\d\\s[0-2]\\d:[0-5]\\d:[0-5]\\d\\sMSK\\s\\d{4}\",\"nosesize\":(\\d+.?\\d),\"name\":\"(.*?)\",\"cardWidth\":(\\d+.?\\d?),\"photo\":\\{\"hair\":\"(Blond|DarkBrown|Red|Rusyi|Brunette|Grey)\",\"eyes\":\"(Blue|Gray|Swamp|Green|Amber|Brown|Yellow|Black)\"},\"headsize\":(\\d+.?\\d?),\"status\":\"(ChiefPoliceOfficer|OfficerAssistant|Jailbird|Suspect)\",\"height\":(\\d+.?\\d?)}";
         String dataCommandRegex = "(remove|add_if_min|add) \\{" + jsonRegex + "}";
-        String nodataCommandRegex = "show|info|start|exit|help|clear|save";
+        String nodataCommandRegex = "show|info|exit|help|clear|save|load";
 
         if (userInput.split(" ")[0].equals("import")) {
-            String userFile = userInput.split(" ",2)[1];
+            String userFile = userInput.split(" ", 2)[1];
             return new Pair<>(importCmd, userFile);
         }
 
-        if (userInput.split(" ", 2)[0].equals("remove")){
+        if (userInput.split(" ", 2)[0].equals("remove")) {
             List<String> matches = findMatches(jsonRegex, userInput);
             if (matches.size() == 0) return new Pair<>(null, "lol");
             String jsonElement = matches.get(0);
