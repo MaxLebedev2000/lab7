@@ -80,7 +80,7 @@ public class Server implements Runnable {
         if (pair.getKey() != null){
             respond = pair.getKey().run(pair.getValue(), manager, (Integer)key.attachment());
         } else {
-            respond = "Нет такой команды!";
+            respond = "Неверная команда!!";
         }
         buffer.clear();
         buffer.put(respond.getBytes());

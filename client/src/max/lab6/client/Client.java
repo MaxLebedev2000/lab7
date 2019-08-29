@@ -32,6 +32,7 @@ public class Client implements Runnable {
 
         try {
             connect(host, port);
+            System.out.println("Соеденение с сервером установлено!");
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -56,7 +57,7 @@ public class Client implements Runnable {
                 } catch (IOException e) {
                     if (e instanceof SocketException){
                         try {
-                            System.out.println("Потеряно соединение с сервером");
+                            System.out.println("Потеряно соединение с сервером!");
                             Thread.sleep(1000);
                             socket.close();
                             connect(host, port);
