@@ -6,6 +6,7 @@ import java.util.Scanner;
 public class Test {
     public static void main(String[] args) throws IOException {
         try {
+            System.out.println("Введите порт сервера" );
             Scanner scanner = new Scanner(System.in);
             int port = Integer.parseInt(scanner.nextLine());
             Client client = new Client("localhost", port);
