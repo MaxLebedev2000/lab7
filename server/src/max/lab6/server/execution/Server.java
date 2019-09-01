@@ -20,7 +20,6 @@ public class Server implements Runnable {
     private FileWorks.collection.CollectionManager manager;
     private static int id = 0;
     private static Map<Integer, SelectionKey> connections = new HashMap<>();
-
     public Server(int port) throws IOException {
         ServerSocketChannel channel = ServerSocketChannel.open();
         channel.bind(new InetSocketAddress("localhost", port));

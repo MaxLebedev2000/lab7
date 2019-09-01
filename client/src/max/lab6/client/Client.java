@@ -12,9 +12,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
+import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
-public class Client implements Runnable {
+public class Client implements Callable<UnknownHostException> {
 
     private Socket socket;
     private String host;
@@ -26,7 +27,7 @@ public class Client implements Runnable {
     }
 
     @Override
-    public void run() {
+    public UnknownHostException call() throws IOException{
         while (true) {
             try {
                 connect(host, port);
@@ -50,11 +51,9 @@ public class Client implements Runnable {
                         continue;
                     }
                 }
-
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (UnknownHostException e){
+                return e;
             }
-
             while (true) {
                 Scanner scanner = new Scanner(System.in);
                 if (scanner.hasNextLine()) {
@@ -78,8 +77,12 @@ public class Client implements Runnable {
                         System.out.println("Отправлено!");
                         byte[] data = new byte[8192];
                         int count = socket.getInputStream().read(data);
-                        System.out.println(new String(data, 0, count));
-
+                        if (count==-1){
+                            System.out.println("неверная команды");
+                            continue;
+                        }else {
+                            System.out.println(new String(data, 0, count));
+                        }
                         if (command.equals("exit")) {
                             System.exit(1);
                         }
