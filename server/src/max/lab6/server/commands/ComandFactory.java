@@ -132,22 +132,19 @@ public class ComandFactory {
     /**
      * Выводит на экран справку по программе
      */
-    private static Comandable helpCmd = ((jsonElement, manager, id) -> {
-
-        return "remove {element}: удалить элемент из коллекции по его значению\n" +
-                "clear: очистить коллекцию\n" +
-                "info: вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)\n" +
-                "add {element}: добавить новый элемент в коллекцию\n" +
-                "show: вывести в стандартный поток вывода все элементы коллекции в строковом представлении\n" +
-                "add_if_min {element}: добавить новый элемент в коллекцию, если его значение меньше, чем у наименьшего элемента этой коллекции\n" +
-                "save: сохранить коллекцию в файл\n" +
-                "help: справка\n" +
-                "exit: выход из программы\n" +
-                "import: загрузка данныз на сервер\n" +
-                "load: загрузка\n" +
-                "Пример json элемента: \n" +
-                "{\"cardHeight\":50,\"date\":\"Fri Aug 16 01:33:12 MSK 2019\",\"nosesize\":2.5,\"name\":\"Красавчик\",\"cardWidth\":2,\"photo\":{\"hair\":\"Red\",\"eyes\":\"Amber\"},\"headsize\":30.5,\"status\":\"Jailbird\",\"height\":72.5}";
-    });
+    private static Comandable helpCmd = ((jsonElement, manager, id) -> "remove {element}: удалить элемент из коллекции по его значению\n" +
+            "clear: очистить коллекцию\n" +
+            "info: вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)\n" +
+            "add {element}: добавить новый элемент в коллекцию\n" +
+            "show: вывести в стандартный поток вывода все элементы коллекции в строковом представлении\n" +
+            "add_if_min {element}: добавить новый элемент в коллекцию, если его значение меньше, чем у наименьшего элемента этой коллекции\n" +
+            "save: сохранить коллекцию в файл\n" +
+            "help: справка\n" +
+            "exit: выход из программы\n" +
+            "import: загрузка данныз на сервер\n" +
+            "load: загрузка\n" +
+            "Пример json элемента: \n" +
+            "{\"cardHeight\":50,\"date\":\"Fri Aug 16 01:33:12 MSK 2019\",\"nosesize\":2.5,\"name\":\"Красавчик\",\"cardWidth\":2,\"photo\":{\"hair\":\"Red\",\"eyes\":\"Amber\"},\"headsize\":30.5,\"status\":\"Jailbird\",\"height\":72.5}");
     /**
      * Начинает работу подпрограммы
      */
@@ -177,13 +174,18 @@ public class ComandFactory {
         String nodataCommandRegex = "show|info|exit|help|clear|save|load";
 
         if (userInput.split(" ")[0].equals("import")) {
-            String userFile = userInput.split(" ", 2)[1];
-            return new Pair<>(importCmd, userFile);
+            String[] array = userInput.split(" ", 2);
+            if (array.length == 2) {
+                String userFile = array[1];
+                return new Pair<>(importCmd, userFile);
+            } else {
+                return new Pair<>(null, "Был отправлен пустой файл");
+            }
         }
 
         if (userInput.split(" ", 2)[0].equals("remove")) {
             List<String> matches = findMatches(jsonRegex, userInput);
-            if (matches.size() == 0) return new Pair<>(null, "lol");
+            if (matches.size() == 0) return new Pair<>(null, "Элемент для удаления не найден");
             String jsonElement = matches.get(0);
             return new Pair<>(removeCmd, jsonElement);
         }

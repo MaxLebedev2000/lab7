@@ -51,6 +51,7 @@ public class Server implements Runnable {
                         }
                     } catch (Exception e) {
                         key.cancel();
+                        e.printStackTrace();
                     }
                 }
 
@@ -72,19 +73,37 @@ public class Server implements Runnable {
         ByteBuffer buffer = ByteBuffer.allocate(8192);
         channel.read(buffer);
         buffer.flip();
-        String command = new String(buffer.array(), 0, buffer.limit());
-        Pair<Comandable, String> pair = ComandFactory.createComand(command);
+        String command =  new String(buffer.array(), 0, buffer.limit());
+        String clearCommand = deleteSpaces(command);
+        Pair<Comandable, String> pair = ComandFactory.createComand(clearCommand);
         String respond;
         if (pair.getKey() != null){
             respond = pair.getKey().run(pair.getValue(), manager, (Integer)key.attachment());
         } else {
-            respond = "Неверная команда!";
+            if (pair.getValue() == null) {
+                respond = "Неверная команда!";
+            } else {
+                respond = pair.getValue();
+            }
         }
         buffer.clear();
         buffer.put(respond.getBytes());
         buffer.flip();
         channel.write(buffer);
     }
+
+   private String deleteSpaces(String command){
+        if (command.length() == 0) return command;
+        String result = command.replaceAll(" {2,}", " ");
+        if (result.charAt(0) == ' '){
+             result = result.substring(1, result.length());
+        }
+        if (result.length() == 0) return result;
+        if (result.charAt(result.length() - 1) == ' '){
+            result = result.substring(0, result.length() - 1);
+        }
+        return result;
+   }
 
     public static Map<Integer, SelectionKey> getConnections(){
         return connections;

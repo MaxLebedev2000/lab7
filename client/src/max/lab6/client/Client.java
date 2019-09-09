@@ -78,7 +78,7 @@ public class Client implements Callable<UnknownHostException> {
                         byte[] data = new byte[8192];
                         int count = socket.getInputStream().read(data);
                         if (count==-1){
-                            System.out.println("неверная команды");
+                            System.out.println("неверная команда");
                             continue;
                         }else {
                             System.out.println(new String(data, 0, count));
