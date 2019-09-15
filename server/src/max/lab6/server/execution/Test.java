@@ -16,7 +16,7 @@ public class Test {
                 break;
             }  catch (NumberFormatException e) {
                 e.printStackTrace();
-                System.out.println("Аргумент не является числом");
+                System.out.println("Номер порта не является числом");
             } catch (BindException e){
                 System.out.println("Порт занят, попробуйте другой");
             }

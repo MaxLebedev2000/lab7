@@ -169,7 +169,12 @@ public class ComandFactory {
      * @return Пара: ключ - сама команда, значение - данные комманды
      */
     public static Pair<Comandable, String> createComand(String userInput) {
-        String jsonRegex = "\\{\"cardHeight\":(\\d+.?\\d),\"date\":\"(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\\s(Jan|Feb|Mar|Apr|May|June|July|Aug|Sept|Oct|Nov|Dec)\\s[0-3]\\d\\s[0-2]\\d:[0-5]\\d:[0-5]\\d\\sMSK\\s\\d{4}\",\"nosesize\":(\\d+.?\\d),\"name\":\"(.*?)\",\"cardWidth\":(\\d+.?\\d?),\"photo\":\\{\"hair\":\"(Blond|DarkBrown|Red|Rusyi|Brunette|Grey)\",\"eyes\":\"(Blue|Gray|Swamp|Green|Amber|Brown|Yellow|Black)\"},\"headsize\":(\\d+.?\\d?),\"status\":\"(ChiefPoliceOfficer|OfficerAssistant|Jailbird|Suspect)\",\"height\":(\\d+.?\\d?)}";
+        String jsonRegex = "\\{\"cardHeight\":(\\d+.?\\d),\"date\":\"(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\\s" +
+                "(Jan|Feb|Mar|Apr|May|June|July|Aug|Sept|Oct|Nov|Dec)\\s[0-3]\\d\\s[0-2]\\d:[0-5]\\d:" +
+                "[0-5]\\d\\sMSK\\s\\d{4}\",\"nosesize\":(\\d+.?\\d),\"name\":\"(.*?)\",\"cardWidth\"" +
+                ":(\\d+.?\\d?),\"photo\":\\{\"hair\":\"(Blond|DarkBrown|Red|Rusyi|Brunette|Grey)\",\"" +
+                "eyes\":\"(Blue|Gray|Swamp|Green|Amber|Brown|Yellow|Black)\"},\"headsize\":(\\d+.?\\d?)," +
+                "\"status\":\"(ChiefPoliceOfficer|OfficerAssistant|Jailbird|Suspect)\",\"height\":(\\d+.?\\d?)}";
         String dataCommandRegex = "(remove|add_if_min|add) \\{" + jsonRegex + "}";
         String nodataCommandRegex = "show|info|exit|help|clear|save|load";
 

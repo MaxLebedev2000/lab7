@@ -4,6 +4,7 @@ import MainPackage.Pair;
 import max.lab6.server.collection.filecollection.Collection;
 import max.lab6.server.commands.ComandFactory;
 import max.lab6.server.commands.Comandable;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -20,6 +21,7 @@ public class Server implements Runnable {
     private FileWorks.collection.CollectionManager manager;
     private static int id = 0;
     private static Map<Integer, SelectionKey> connections = new HashMap<>();
+
     public Server(int port) throws IOException {
         ServerSocketChannel channel = ServerSocketChannel.open();
         channel.bind(new InetSocketAddress("localhost", port));
@@ -49,8 +51,9 @@ public class Server implements Runnable {
                         } else {
                             handleCommand(key);
                         }
-                    } catch (Exception e) {
+                    } catch (IOException e) {
                         key.cancel();
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -64,21 +67,21 @@ public class Server implements Runnable {
     private void handleNewConnection(SelectionKey key) throws IOException {
         SocketChannel channel = ((ServerSocketChannel) key.channel()).accept();
         channel.configureBlocking(false);
-        int curId = id ++;
+        int curId = id++;
         connections.put(curId, channel.register(selector, SelectionKey.OP_READ, curId));
     }
 
     private void handleCommand(SelectionKey key) throws IOException {
-        SocketChannel channel = (SocketChannel)key.channel();
+        SocketChannel channel = (SocketChannel) key.channel();
         ByteBuffer buffer = ByteBuffer.allocate(8192);
         channel.read(buffer);
         buffer.flip();
-        String command =  new String(buffer.array(), 0, buffer.limit());
-        String clearCommand = deleteSpaces(command);
+        String command = new String(buffer.array(), 0, buffer.limit());
+        String clearCommand = command.trim();
         Pair<Comandable, String> pair = ComandFactory.createComand(clearCommand);
         String respond;
-        if (pair.getKey() != null){
-            respond = pair.getKey().run(pair.getValue(), manager, (Integer)key.attachment());
+        if (pair.getKey() != null) {
+            respond = pair.getKey().run(pair.getValue(), manager, (Integer) key.attachment());
         } else {
             if (pair.getValue() == null) {
                 respond = "Неверная команда!";
@@ -92,24 +95,24 @@ public class Server implements Runnable {
         channel.write(buffer);
     }
 
-   private String deleteSpaces(String command){
+/*    private String deleteSpaces(String command) {
         if (command.length() == 0) return command;
         String result = command.replaceAll(" {2,}", " ");
-        if (result.charAt(0) == ' '){
-             result = result.substring(1, result.length());
+        if (result.charAt(0) == ' ') {
+            result = result.substring(1, result.length());
         }
         if (result.length() == 0) return result;
-        if (result.charAt(result.length() - 1) == ' '){
+        if (result.charAt(result.length() - 1) == ' ') {
             result = result.substring(0, result.length() - 1);
         }
         return result;
-   }
+    }*/
 
-    public static Map<Integer, SelectionKey> getConnections(){
+    public static Map<Integer, SelectionKey> getConnections() {
         return connections;
     }
 
-    public Selector getSelector(){
+    public Selector getSelector() {
         return selector;
     }
 }
