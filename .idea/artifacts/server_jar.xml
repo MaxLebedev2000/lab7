@@ -6,7 +6,10 @@
         <element id="file-copy" path="$PROJECT_DIR$/server/META-INF/MANIFEST.MF" />
       </element>
       <element id="module-output" name="server" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/LastVaricPoProje3.jar" path-in-jar="/" />
+      <element id="module-output" name="lab5" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/postgresql-42.2.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javax.mail.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/json-20180813.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

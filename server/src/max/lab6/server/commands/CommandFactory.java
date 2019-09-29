@@ -1,9 +1,10 @@
 package max.lab6.server.commands;
 
-import Humans.Card;
-import MainPackage.Main;
-import MainPackage.Pair;
-import max.lab6.server.execution.Server;
+
+import max.lab5.humans.Card;
+import max.lab6.server.Pair;
+import max.lab7.server.execution.Server;
+import max.lab7.server.users.Connection;
 import org.json.CDL;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,13 +17,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class ComandFactory {
+public class CommandFactory {
     /**
      * Удаляет элемент из коллекции
      */
-    private static Comandable removeCmd = (jsonElement, manager, id) -> {
-        manager.updateCollection();
-        Card card = new Card(new JSONObject(jsonElement));
+    private static Commandable removeCmd = (jsonElement, manager, id) -> {
+        String owner = ((Connection)Server.getConnections().get(id).attachment()).getLogin();
+        Card card = new Card(new JSONObject(jsonElement).put("owner", owner));
         manager.getCollection().remove(card);
         manager.write(); // Сохраняет коллекцию
         return "Элемент удалён!";
@@ -30,8 +31,7 @@ public class ComandFactory {
     /**
      * Очищает коллекцию
      */
-    private static Comandable clearCmd = ((jsonElement, manager, id) -> {
-        manager.updateCollection();
+    private static Commandable clearCmd = ((jsonElement, manager, id) -> {
         manager.getCollection().clear();
         manager.write(); // Сохраняет коллекцию
         return "Коллекция очищена!";
@@ -39,8 +39,7 @@ public class ComandFactory {
     /**
      * Выводит на экран иныормацию о коллекции
      */
-    private static Comandable infoCmd = ((jsonElement, manager, id) -> {
-        manager.updateCollection();
+    private static Commandable infoCmd = ((jsonElement, manager, id) -> {
         return "Тип коллекции: " + manager.getCollection().getClass().getSimpleName() + "\n" +
                 "Дата инициализации коллекции: " + new Date().toString() + "\n" +
                 "Тип элементов коллекции: " + "Humans.Card" + "\n" +
@@ -49,9 +48,9 @@ public class ComandFactory {
     /**
      * Добавляет элемент в коллекцию
      */
-    private static Comandable addCmd = (jsonElement, manager, id) -> {
-        manager.updateCollection();
-        Card card = new Card(new JSONObject(jsonElement));
+    private static Commandable addCmd = (jsonElement, manager, id) -> {
+        String owner = ((Connection)Server.getConnections().get(id).attachment()).getLogin();
+        Card card = new Card(new JSONObject(jsonElement).put("owner", owner));
         manager.getCollection().add(card);
         manager.write(); // Сохраняет коллекцию
         return "Элемент добавлен!";
@@ -59,9 +58,9 @@ public class ComandFactory {
     /**
      * Добавляет элемент в коллекцию, если он минимальный
      */
-    private static Comandable addIfMinCmd = (jsonElement, manager, id) -> {
-        manager.updateCollection();
-        Card card = new Card(new JSONObject(jsonElement));
+    private static Commandable addIfMinCmd = (jsonElement, manager, id) -> {
+        String owner = ((Connection)Server.getConnections().get(id).attachment()).getLogin();
+        Card card = new Card(new JSONObject(jsonElement).put("owner", owner));
         if (Collections.min(manager.getCollection()).compareTo(card) > 0) {
             manager.getCollection().add(card);
             manager.write(); // Сохраняет коллекцию
@@ -72,23 +71,21 @@ public class ComandFactory {
     /**
      * Выводит на экран элементы коллекции
      */
-    private static Comandable showCmd = ((jsonElement, manager, id) -> {
-        manager.updateCollection();
+    private static Commandable showCmd = ((jsonElement, manager, id) -> {
         if (manager.getCollection().size() == 0) return "Коллекция пуста";
         return manager.getCollection().stream().map(Card::toString).collect(Collectors.joining("\n+++++++++++++++++++++++++++++++++++++++++++++\n"));
     });
     /**
      * Сохраняет коллекцию в файл
      */
-    private static Comandable saveCmd = ((jsonElement, manager, id) -> {
-        manager.updateCollection();
+    private static Commandable saveCmd = ((jsonElement, manager, id) -> {
         manager.write();
         return "Коллекция сохранена";
     });
     /**
      * Завершает работу программы
      */
-    private static Comandable exitCmd = ((jsonElement, manager, id) -> {
+    private static Commandable exitCmd = ((jsonElement, manager, id) -> {
         Server.getConnections().remove(id).cancel();
         return "Завершение работы программы!";
     });
@@ -96,26 +93,24 @@ public class ComandFactory {
     /**
      * Переносит данные нв сервер
      */
-    private static Comandable importCmd = ((jsonElement, manager, id) -> {
-        System.out.println(manager.getCollection().size());
-        manager.updateCollection();
-        System.out.println(manager.getCollection().size());
+    private static Commandable importCmd = ((jsonElement, manager, id) -> {
+        String owner = ((Connection)Server.getConnections().get(id).attachment()).getLogin();
         try {
             if (jsonElement.length() != 0) {
                 JSONArray array = CDL.toJSONArray(jsonElement);
+
                 array.forEach(p -> {
-                    Card card = new Card((JSONObject) p);
+                    JSONObject o = (JSONObject) p;
+                    o.put("owner", owner);
+                    Card card = new Card(o);
                     manager.getCollection().add(card);
                 });
-                System.out.println(manager.getCollection().size());
                 manager.write(); // Сохраняет коллекцию
-                System.out.println(manager.getCollection().size());
             }
 
             return "Данные загружены на сервер!";
         } catch (Exception e) {
             return e.getMessage();
-
         }
 
     });
@@ -123,8 +118,8 @@ public class ComandFactory {
     /**
      * Загружает данные
      */
-    private static Comandable loadCmd = ((jsonElement, manager, id) -> {
-        manager.updateCollection();
+    private static Commandable loadCmd = ((jsonElement, manager, id) -> {
+        manager.read();
         return "Данные загружены";
     });
 
@@ -132,7 +127,7 @@ public class ComandFactory {
     /**
      * Выводит на экран справку по программе
      */
-    private static Comandable helpCmd = ((jsonElement, manager, id) -> "remove {element}: удалить элемент из коллекции по его значению\n" +
+    private static Commandable helpCmd = ((jsonElement, manager, id) -> "remove {element}: удалить элемент из коллекции по его значению\n" +
             "clear: очистить коллекцию\n" +
             "info: вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)\n" +
             "add {element}: добавить новый элемент в коллекцию\n" +
@@ -144,23 +139,9 @@ public class ComandFactory {
             "import: загрузка данныз на сервер\n" +
             "load: загрузка\n" +
             "Пример json элемента: \n" +
-            "{\"cardHeight\":50,\"date\":\"Fri Aug 16 01:33:12 MSK 2019\",\"nosesize\":2.5,\"name\":\"Красавчик\",\"cardWidth\":2,\"photo\":{\"hair\":\"Red\",\"eyes\":\"Amber\"},\"headsize\":30.5,\"status\":\"Jailbird\",\"height\":72.5}");
-    /**
-     * Начинает работу подпрограммы
-     */
-/*    private static Comandable startCmd = ((jsonElement, manager) -> {
-        manager.updateCollection();
-        if(manager.getCollection().size() >= 2){
-            System.out.println("Готово!");
-            Main.start(manager);
-            return "Готово!";
-        }
-        else{
-            System.out.println("В коллекции слишком мало объектов для запуска программы!");
-            System.out.println("Готово!");
-            return "В коллекции слишком мало объектов для запуска программы!"+"\n"+"Готово!";
-        }
-    });*/
+            "{\"cardHeight\":50,\"nosesize\":2.5,\"name\":\"Красавчик\"," +
+            "\"cardWidth\":2,\"photo\":{\"hair\":\"Red\",\"eyes\":\"Amber\"}," +
+            "\"headsize\":30.5,\"status\":\"Jailbird\",\"height\":72.5}");
 
     /**
      * Создаёт комманду
@@ -168,10 +149,8 @@ public class ComandFactory {
      * @param userInput Строка с коммандой и данными в формате json
      * @return Пара: ключ - сама команда, значение - данные комманды
      */
-    public static Pair<Comandable, String> createComand(String userInput) {
-        String jsonRegex = "\\{\"cardHeight\":(\\d+.?\\d),\"date\":\"(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\\s" +
-                "(Jan|Feb|Mar|Apr|May|June|July|Aug|Sept|Oct|Nov|Dec)\\s[0-3]\\d\\s[0-2]\\d:[0-5]\\d:" +
-                "[0-5]\\d\\sMSK\\s\\d{4}\",\"nosesize\":(\\d+.?\\d),\"name\":\"(.*?)\",\"cardWidth\"" +
+    public static Pair<Commandable, String> createComand(String userInput) {
+        String jsonRegex = "\\{\"cardHeight\":(\\d+.?\\d),\"nosesize\":(\\d+.?\\d),\"name\":\"(.*?)\",\"cardWidth\"" +
                 ":(\\d+.?\\d?),\"photo\":\\{\"hair\":\"(Blond|DarkBrown|Red|Rusyi|Brunette|Grey)\",\"" +
                 "eyes\":\"(Blue|Gray|Swamp|Green|Amber|Brown|Yellow|Black)\"},\"headsize\":(\\d+.?\\d?)," +
                 "\"status\":\"(ChiefPoliceOfficer|OfficerAssistant|Jailbird|Suspect)\",\"height\":(\\d+.?\\d?)}";

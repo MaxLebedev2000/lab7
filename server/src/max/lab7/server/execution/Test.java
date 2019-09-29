@@ -1,4 +1,5 @@
-package max.lab6.server.execution;
+package max.lab7.server.execution;
+
 
 import java.io.IOException;
 import java.net.BindException;
@@ -6,6 +7,9 @@ import java.util.Scanner;
 
 public class Test {
     public static void main(String[] args) throws IOException {
+
+
+        //JDBCWorker.instance().getUsers().remove(new User("max","",""));
         while (true) {
             try {
                 System.out.println("Введите порт канала сервера");

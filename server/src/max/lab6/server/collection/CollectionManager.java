@@ -4,8 +4,9 @@ import max.lab5.humans.Card;
 
 import java.util.Set;
 
-public interface Reader {
+public interface CollectionManager {
     boolean read();
+    boolean write();
+    void close();
     Set<Card> getCollection();
-
 }

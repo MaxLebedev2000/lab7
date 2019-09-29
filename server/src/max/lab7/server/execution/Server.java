@@ -1,26 +1,29 @@
-package max.lab6.server.execution;
+package max.lab7.server.execution;
 
-import MainPackage.Pair;
-import max.lab6.server.collection.filecollection.Collection;
-import max.lab6.server.commands.ComandFactory;
-import max.lab6.server.commands.Comandable;
+import max.lab6.server.collection.databasecollection.Cards;
+import max.lab6.server.collection.CollectionManager;
+import max.lab7.server.execution.handlers.CommandKeyHandler;
+import max.lab7.server.execution.handlers.UnknownKeyHandler;
+import max.lab7.server.sql.JDBCWorker;
+import max.lab7.server.users.Connection;
+import max.lab7.server.users.Type;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class Server implements Runnable {
 
     private Selector selector;
-    private FileWorks.collection.CollectionManager manager;
+    private CollectionManager manager;
     private static int id = 0;
     private static Map<Integer, SelectionKey> connections = new HashMap<>();
+    private Map<String, KeyHandler> handlers = new HashMap<>();
+    private JDBCWorker database = JDBCWorker.instance();
 
     public Server(int port) throws IOException {
         ServerSocketChannel channel = ServerSocketChannel.open();
@@ -28,8 +31,9 @@ public class Server implements Runnable {
         channel.configureBlocking(false);
         selector = Selector.open();
         channel.register(selector, SelectionKey.OP_ACCEPT);
-        manager = new Collection("collection.csv");
-        manager.updateCollection();
+        manager = new Cards();
+        handlers.put(Type.COMMANDS.name(), new CommandKeyHandler(manager));
+        handlers.put(Type.UNKNOWN.name(), new UnknownKeyHandler());
 
     }
 
@@ -68,45 +72,20 @@ public class Server implements Runnable {
         SocketChannel channel = ((ServerSocketChannel) key.channel()).accept();
         channel.configureBlocking(false);
         int curId = id++;
-        connections.put(curId, channel.register(selector, SelectionKey.OP_READ, curId));
+        Connection connection = new Connection(curId);
+        connections.put(curId, channel.register(selector, SelectionKey.OP_READ, connection));
     }
 
     private void handleCommand(SelectionKey key) throws IOException {
-        SocketChannel channel = (SocketChannel) key.channel();
-        ByteBuffer buffer = ByteBuffer.allocate(8192);
-        channel.read(buffer);
-        buffer.flip();
-        String command = new String(buffer.array(), 0, buffer.limit());
-        String clearCommand = command.trim();
-        Pair<Comandable, String> pair = ComandFactory.createComand(clearCommand);
-        String respond;
-        if (pair.getKey() != null) {
-            respond = pair.getKey().run(pair.getValue(), manager, (Integer) key.attachment());
-        } else {
-            if (pair.getValue() == null) {
-                respond = "Неверная команда!";
-            } else {
-                respond = pair.getValue();
-            }
+        KeyHandler handler = handlers.get(((Connection)key.attachment()).type().name());
+        try {
+            handler.handle(key);
+        } catch (IOException e) {
+            throw e;
+        } catch (Exception e){
+            e.printStackTrace();
         }
-        buffer.clear();
-        buffer.put(respond.getBytes());
-        buffer.flip();
-        channel.write(buffer);
     }
-
-/*    private String deleteSpaces(String command) {
-        if (command.length() == 0) return command;
-        String result = command.replaceAll(" {2,}", " ");
-        if (result.charAt(0) == ' ') {
-            result = result.substring(1, result.length());
-        }
-        if (result.length() == 0) return result;
-        if (result.charAt(result.length() - 1) == ' ') {
-            result = result.substring(0, result.length() - 1);
-        }
-        return result;
-    }*/
 
     public static Map<Integer, SelectionKey> getConnections() {
         return connections;

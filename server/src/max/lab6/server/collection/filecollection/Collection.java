@@ -1,16 +1,16 @@
 package max.lab6.server.collection.filecollection;
 
-import Humans.Card;
+import max.lab5.humans.Card;
+import max.lab6.server.collection.CollectionManager;
 import max.lab6.server.collection.Reader;
 import max.lab6.server.collection.Writer;
-
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Класс-менеджер коллекции
  */
-public class Collection implements FileWorks.collection.CollectionManager {
+public class Collection implements CollectionManager {
     /**
      * Читатель коллекции
      */

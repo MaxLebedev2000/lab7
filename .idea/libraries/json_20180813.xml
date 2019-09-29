@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="LastVaricPoProje3">
+  <library name="json-20180813">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/LastVaricPoProje3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/json-20180813.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

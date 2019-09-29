@@ -1,10 +1,10 @@
 package max.lab6.server.collection.filecollection;
 
-import Humans.Card;
+
 import max.lab6.server.collection.Writer;
 import org.json.CDL;
 import org.json.JSONArray;
-
+import max.lab5.humans.Card;
 
 import java.io.File;
 import java.io.FileWriter;

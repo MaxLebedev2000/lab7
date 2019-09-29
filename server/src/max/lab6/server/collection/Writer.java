@@ -1,6 +1,7 @@
 package max.lab6.server.collection;
 
-import Humans.Card;
+
+import max.lab5.humans.Card;
 
 import java.util.Set;
 

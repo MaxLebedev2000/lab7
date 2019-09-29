@@ -1,12 +1,14 @@
 package max.lab6.server.collection.filecollection;
 
-import Humans.Card;
+
+import max.lab5.humans.Card;
 import max.lab6.server.collection.Reader;
 import org.json.CDL;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.Scanner;
 

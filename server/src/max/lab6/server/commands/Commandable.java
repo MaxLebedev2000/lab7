@@ -1,12 +1,12 @@
 package max.lab6.server.commands;
 
 
-import FileWorks.collection.CollectionManager;
+import max.lab6.server.collection.CollectionManager;
 
 /**
  * Коммандный интерфейс
  */
-public interface Comandable {
+public interface Commandable {
     /**
      * Запускатет комманду
      * @param jsonElement данные комманды
