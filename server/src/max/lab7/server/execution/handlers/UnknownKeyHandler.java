@@ -9,6 +9,7 @@ import max.lab7.server.users.Connection;
 import max.lab7.server.users.Type;
 import max.lab7.server.users.User;
 
+import javax.mail.MessagingException;
 import java.nio.channels.SelectionKey;
 
 public class UnknownKeyHandler extends TCPHandler implements KeyHandler {
@@ -40,14 +41,19 @@ public class UnknownKeyHandler extends TCPHandler implements KeyHandler {
             } else {
                 String pass = PasswordMaker.getRandomString();
                 String password = PasswordMaker.getHexDigest(pass);
-                mail.send("Регистрация нового пользователя",
-                        "Пароль: " + pass + ";\n" +
-                                "Логин: " + login + ";",
-                        email);
-                users.put(new User(login, email, password));
-                respond = "regdone";
-                ((Connection)key.attachment()).setLogin(login);
-                ((Connection)key.attachment()).setType(Type.COMMANDS);
+                try {
+                    mail.send("Регистрация нового пользователя",
+                            "Пароль: " + pass + ";\n" +
+                                    "Логин: " + login + ";",
+                            email);
+                    users.put(new User(login, email, password));
+                    respond = "regdone";
+                    ((Connection)key.attachment()).setLogin(login);
+                    ((Connection)key.attachment()).setType(Type.COMMANDS);
+                } catch (Throwable e){
+                    respond = "mailerror";
+                }
+
             }
 
             super.send(key, respond);

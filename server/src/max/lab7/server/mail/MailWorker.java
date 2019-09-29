@@ -28,10 +28,10 @@ public class MailWorker {
         });
     }
 
-    public boolean send(String theme, String message, String toEmail) {
+    public boolean send(String theme, String message, String toEmail) throws MessagingException{
         Message msg = new MimeMessage(session);
 
-        try {
+
             msg.setFrom(new InternetAddress(login));
             msg.setRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
             msg.setSubject(theme);
@@ -41,10 +41,7 @@ public class MailWorker {
 
             return true;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+
     }
 
 }

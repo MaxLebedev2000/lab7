@@ -164,6 +164,10 @@ public class Client implements Callable<UnknownHostException> {
                                 System.out.println("Пользователь с данным логином не найден");
                                 break;
 
+                            case "mailerror":
+                                System.out.println("Возникла ошибка при отправке сообщения ");
+                                break;
+
                             default:
                                 System.out.println("Unknown respond " + respond);
                                 break;

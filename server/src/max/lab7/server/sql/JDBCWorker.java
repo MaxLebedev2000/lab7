@@ -13,9 +13,9 @@ public class JDBCWorker {
     private final String DB_URL = "jdbc:postgresql://pg:5432/studs";
     private final String USER = "s263919";
     private final String PASS = "hux779";
-   /** private final String DB_URL = "jdbc:postgresql://localhost:5432/lab7";
-    private final String USER = "postgres";
-    private final String PASS = "123";*/
+//    private final String DB_URL = "jdbc:postgresql://localhost:5432/lab7";
+//    private final String USER = "postgres";
+//    private final String PASS = "123";
     private static JDBCWorker instance;
 
     public static JDBCWorker instance(){
