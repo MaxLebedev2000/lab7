@@ -1,9 +1,9 @@
-package max.lab6.server.collection.filecollection;
+package max.lab7.server.collection.filecollection;
 
 import max.lab5.humans.Card;
-import max.lab6.server.collection.CollectionManager;
-import max.lab6.server.collection.Reader;
-import max.lab6.server.collection.Writer;
+import max.lab7.server.collection.CollectionManager;
+import max.lab7.server.collection.Reader;
+import max.lab7.server.collection.Writer;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 

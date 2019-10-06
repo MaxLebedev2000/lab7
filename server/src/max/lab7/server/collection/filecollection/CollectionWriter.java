@@ -1,7 +1,7 @@
-package max.lab6.server.collection.filecollection;
+package max.lab7.server.collection.filecollection;
 
 
-import max.lab6.server.collection.Writer;
+import max.lab7.server.collection.Writer;
 import org.json.CDL;
 import org.json.JSONArray;
 import max.lab5.humans.Card;

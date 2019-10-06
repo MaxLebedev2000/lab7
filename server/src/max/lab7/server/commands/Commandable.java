@@ -1,7 +1,7 @@
-package max.lab6.server.commands;
+package max.lab7.server.commands;
 
 
-import max.lab6.server.collection.CollectionManager;
+import max.lab7.server.collection.CollectionManager;
 
 /**
  * Коммандный интерфейс

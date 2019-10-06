@@ -1,4 +1,4 @@
-package max.lab6.server;
+package max.lab7.server;
 
 public class Pair<K,V> {
     K key;

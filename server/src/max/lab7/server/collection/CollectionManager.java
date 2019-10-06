@@ -1,4 +1,4 @@
-package max.lab6.server.collection;
+package max.lab7.server.collection;
 
 import max.lab5.humans.Card;
 
