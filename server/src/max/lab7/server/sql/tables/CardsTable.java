@@ -93,17 +93,6 @@ public class CardsTable extends JDBCTable<Card> {
     }
 
     @Override
-    public String getAsString() {
-        try (PreparedStatement statement = connection().prepareStatement("SELECT * FROM " + NAME)) {
-            return SQLUtils.getTableAsString(statement.executeQuery());
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return e.getMessage();
-        }
-    }
-
-    @Override
     public boolean exists(Card card) {
         try (PreparedStatement statement = connection().
                 prepareStatement("SELECT FROM cards WHERE " + condition(card))) {
