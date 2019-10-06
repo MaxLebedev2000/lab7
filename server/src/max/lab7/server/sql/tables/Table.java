@@ -10,5 +10,4 @@ public interface Table<T> {
     boolean addAll(Set<T> set) throws SQLException;
     Set<T> set() throws SQLException;
     boolean exists(T t) throws SQLException;
-    String getAsString() throws SQLException;
 }
