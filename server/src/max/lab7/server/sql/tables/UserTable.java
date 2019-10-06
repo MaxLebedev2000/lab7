@@ -58,18 +58,6 @@ public class UserTable extends JDBCTable<User> {
     }
 
     @Override
-    public String getAsString(){
-        try(PreparedStatement statement = connection().prepareStatement("SELECT * FROM users")){
-            return SQLUtils.getTableAsString(statement.executeQuery());
-
-        } catch (SQLException e){
-            e.printStackTrace();
-            return e.getMessage();
-        }
-    }
-
-
-    @Override
     public boolean exists(User user) {
         try (PreparedStatement statement = connection().
                 prepareStatement("SELECT * FROM users WHERE login = \'" + user.login + "\';")){
