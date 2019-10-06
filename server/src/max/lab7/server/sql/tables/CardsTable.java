@@ -31,7 +31,7 @@ public class CardsTable extends JDBCTable<Card> {
 
             statement.setString(1, card.getDate().toString());
             statement.setString(2, card.getName());
-            statement.setString(3, card.getPhoto().getEyes().toString());
+            statement.setString(3, card.getPhoto().getEyes().name());
             statement.setString(4, card.getPhoto().getHair().name());
             statement.setString(5, card.getStatus().name());
             statement.setString(6, String.valueOf(card.getHeight()));
