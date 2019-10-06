@@ -1,7 +1,7 @@
-package max.lab6.server.collection.databasecollection;
+package max.lab7.server.collection.databasecollection;
 
 import max.lab5.humans.Card;
-import max.lab6.server.collection.CollectionManager;
+import max.lab7.server.collection.CollectionManager;
 import max.lab7.server.sql.JDBCWorker;
 import max.lab7.server.sql.tables.CardsTable;
 

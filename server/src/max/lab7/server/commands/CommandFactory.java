@@ -1,8 +1,8 @@
-package max.lab6.server.commands;
+package max.lab7.server.commands;
 
 
 import max.lab5.humans.Card;
-import max.lab6.server.Pair;
+import max.lab7.server.Pair;
 import max.lab7.server.execution.Server;
 import max.lab7.server.users.Connection;
 import org.json.CDL;
@@ -42,7 +42,7 @@ public class CommandFactory {
     private static Commandable infoCmd = ((jsonElement, manager, id) -> {
         return "Тип коллекции: " + manager.getCollection().getClass().getSimpleName() + "\n" +
                 "Дата инициализации коллекции: " + new Date().toString() + "\n" +
-                "Тип элементов коллекции: " + "Humans.Card" + "\n" +
+                "Тип элементов коллекции: " + Card.class.getSimpleName() + "\n" +
                 "Количество элементов коллекции: " + manager.getCollection().size() + "\n" + "Готово!" + "\n";
     });
     /**

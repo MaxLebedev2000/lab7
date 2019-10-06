@@ -94,7 +94,7 @@ public class Card extends Options implements Comparable{
         return (int)(getHeight() * 7) + (int)(getHeadSize() * 11) + (int)(getNoseSize() * 13) + getName().hashCode() + getPhoto().getEyes().hashCode() + getPhoto().getHair().hashCode(); }
     @Override
     public String toString(){
-        return "Имя: "+getName()+"\n"+"Статус: "+getStatus()+"\n"+"Рост: "+getHeight()+"\n"+"Размер головы: "+getHeadSize()+"\n"+"Размер носа: "+getNoseSize()+"\n"+"Цвет глаз: "+photo.eyes+"\n"+"Цвет волос: "+photo.hair+ "\n"+"Дата: "+getDate(); }
+        return "Имя: "+getName()+"\n"+"Статус: "+getStatus()+"\n"+"Рост: "+getHeight()+"\n"+"Размер головы: "+getHeadSize()+"\n"+"Размер носа: "+getNoseSize()+"\n"+"Цвет глаз: "+photo.eyes+"\n"+"Цвет волос: "+photo.hair+ "\n"+"Дата: "+getDate()+"Владелец: "+getOwner(); }
     @Override
     public boolean equals(Object o){
         if (o == null) return false;

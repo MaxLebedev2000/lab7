@@ -1,7 +1,7 @@
 package max.lab7.server.execution;
 
-import max.lab6.server.collection.databasecollection.Cards;
-import max.lab6.server.collection.CollectionManager;
+import max.lab7.server.collection.databasecollection.Cards;
+import max.lab7.server.collection.CollectionManager;
 import max.lab7.server.execution.handlers.CommandKeyHandler;
 import max.lab7.server.execution.handlers.UnknownKeyHandler;
 import max.lab7.server.sql.JDBCWorker;

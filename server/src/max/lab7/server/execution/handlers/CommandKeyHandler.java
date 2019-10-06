@@ -1,9 +1,9 @@
 package max.lab7.server.execution.handlers;
 
-import max.lab6.server.Pair;
-import max.lab6.server.collection.CollectionManager;
-import max.lab6.server.commands.CommandFactory;
-import max.lab6.server.commands.Commandable;
+import max.lab7.server.Pair;
+import max.lab7.server.collection.CollectionManager;
+import max.lab7.server.commands.CommandFactory;
+import max.lab7.server.commands.Commandable;
 import max.lab7.server.execution.KeyHandler;
 import max.lab7.server.users.Connection;
 
